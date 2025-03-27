@@ -13,8 +13,17 @@ use App\Http\Controllers\PaymentHistoryController;
 use App\Http\Controllers\RoutesController;
 use App\Http\Controllers\VehiclesTypeController;
 use App\Http\Controllers\WebAuthController;
+use App\Http\Controllers\OwnerController;
+use App\Http\Controllers\CornerController;
+use App\Http\Controllers\CityController;
+use App\Http\Controllers\TownshipController;
+use App\Http\Controllers\StreetController;
+use App\Http\Controllers\WifiController;
+use App\Http\Controllers\LandController;
+use App\Http\Controllers\RenterController;
+use App\Http\Controllers\OwnerDataController;
+use App\Http\Controllers\WardController;
 use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
