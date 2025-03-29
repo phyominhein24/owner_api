@@ -21,11 +21,8 @@ class CityStoreRequest extends FormRequest
      */
     public function rules(): array
     {
-        $enum = implode(',', (new Enum(GeneralStatusEnum::class))->values());
-
         return [
-            'name' => 'required|string| unique:cities,name| max:1000 | min:1',
-            'status' => "nullable|in:$enum"
+            'name' => 'required|string| unique:cities,name| max:1000 | min:1'
         ];
     }
 }

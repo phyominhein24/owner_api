@@ -2,6 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\GeneralStatusEnum;
+use App\Helpers\Enum;
+use App\Models\Land;
 use Illuminate\Foundation\Http\FormRequest;
 
 class LandUpdateRequest extends FormRequest
@@ -26,8 +29,7 @@ class LandUpdateRequest extends FormRequest
         $landId = $land->id;
 
         return [
-            'name' => "required|string| unique:lands,name,$landId| max:1000 | min:1",
-            'status' => "required|in:$enum"
+            'name' => "required|string| unique:lands,name,$landId| max:1000 | min:1"
         ];
     }
 }

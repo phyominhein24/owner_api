@@ -2,6 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\GeneralStatusEnum;
+use App\Helpers\Enum;
+use App\Models\Township;
 use Illuminate\Foundation\Http\FormRequest;
 
 class TownshipUpdateRequest extends FormRequest
@@ -26,8 +29,7 @@ class TownshipUpdateRequest extends FormRequest
         $townshipId = $township->id;
 
         return [
-            'name' => "required|string| unique:townships,name,$cornerId| max:1000 | min:1",
-            'status' => "required|in:$enum"
+            'name' => "required|string| unique:townships,name,$cornerId| max:1000 | min:1"
         ];
     }
 }

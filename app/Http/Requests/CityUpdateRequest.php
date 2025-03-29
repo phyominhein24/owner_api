@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\City;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CityUpdateRequest extends FormRequest
@@ -21,13 +22,11 @@ class CityUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        $enum = implode(',', (new Enum(GeneralStatusEnum::class))->values());
         $city = City::findOrFail(request('id'));
         $cityId = $city->id;
 
         return [
-            'name' => "required|string| unique:citys,name,$cityId| max:1000 | min:1",
-            'status' => "required|in:$enum"
+            'name' => "required|string| unique:citys,name,$cityId| max:1000 | min:1"
         ];
     }
 }

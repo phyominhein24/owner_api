@@ -2,6 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\GeneralStatusEnum;
+use App\Helpers\Enum;
+use App\Models\Ward;
 use Illuminate\Foundation\Http\FormRequest;
 
 class WardUpdateRequest extends FormRequest
@@ -26,8 +29,7 @@ class WardUpdateRequest extends FormRequest
         $wardId = $ward->id;
 
         return [
-            'name' => "required|string| unique:wards,name,$wardId| max:1000 | min:1",
-            'status' => "required|in:$enum"
+            'name' => "required|string| unique:wards,name,$wardId| max:1000 | min:1"
         ];
     }
 }

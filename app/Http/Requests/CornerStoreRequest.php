@@ -21,11 +21,9 @@ class CornerStoreRequest extends FormRequest
      */
     public function rules(): array
     {
-        $enum = implode(',', (new Enum(GeneralStatusEnum::class))->values());
 
         return [
-            'name' => 'required|string| unique:corners,name| max:1000 | min:1',
-            'status' => "nullable|in:$enum"
+            'name' => 'required|string| unique:corners,name| max:1000 | min:1'
         ];
     }
 }

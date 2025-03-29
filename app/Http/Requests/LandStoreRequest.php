@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\GeneralStatusEnum;
+use App\Helpers\Enum;
 use Illuminate\Foundation\Http\FormRequest;
 
 class LandStoreRequest extends FormRequest
@@ -24,8 +26,7 @@ class LandStoreRequest extends FormRequest
         $enum = implode(',', (new Enum(GeneralStatusEnum::class))->values());
 
         return [
-            'name' => 'required|string| unique:lands,name| max:1000 | min:1',
-            'status' => "nullable|in:$enum"
+            'name' => 'required|string| unique:lands,name| max:1000 | min:1'
         ];
     }
 }

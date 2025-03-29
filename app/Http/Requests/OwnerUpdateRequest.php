@@ -2,6 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\GeneralStatusEnum;
+use App\Helpers\Enum;
+use App\Models\Owner;
 use Illuminate\Foundation\Http\FormRequest;
 
 class OwnerUpdateRequest extends FormRequest
@@ -26,8 +29,7 @@ class OwnerUpdateRequest extends FormRequest
         $ownerId = $owner->id;
 
         return [
-            'name' => "required|string| unique:owners,name,$ownerId| max:1000 | min:1",
-            'status' => "required|in:$enum"
+            'name' => "required|string| unique:owners,name,$ownerId| max:1000 | min:1"
         ];
     }
 }

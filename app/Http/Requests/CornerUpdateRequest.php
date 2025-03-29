@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Corner;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CornerUpdateRequest extends FormRequest
@@ -21,13 +22,11 @@ class CornerUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        $enum = implode(',', (new Enum(GeneralStatusEnum::class))->values());
         $corner = Corner::findOrFail(request('id'));
         $cornerId = $corner->id;
 
         return [
-            'name' => "required|string| unique:corners,name,$cornerId| max:1000 | min:1",
-            'status' => "required|in:$enum"
+            'name' => "required|string| unique:corners,name,$cornerId| max:1000 | min:1"
         ];
     }
 }

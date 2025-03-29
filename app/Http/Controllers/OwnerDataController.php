@@ -53,6 +53,11 @@ class OwnerDataController extends Controller
     {
         DB::beginTransaction();
         $payload = collect($request->validated());
+
+        if ($request->hasFile('photos')) {
+            $data['photos'] = collect($request->file('photos'))->map(fn ($file) => $file->store('owner_photos', 'public'));
+        }
+
         try {
             $ownerData = OwnerData::create($payload->toArray());
             DB::commit();
@@ -80,6 +85,11 @@ class OwnerDataController extends Controller
     {
         DB::beginTransaction();
         $payload = collect($request->validated());
+
+        if ($request->hasFile('photos')) {
+            $data['photos'] = collect($request->file('photos'))->map(fn ($file) => $file->store('owner_photos', 'public'));
+        }
+        
         try {
             $ownerData = OwnerData::findOrFail($id);
             $ownerData->update($payload->toArray());

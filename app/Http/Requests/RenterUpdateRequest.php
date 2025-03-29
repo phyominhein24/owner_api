@@ -2,6 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\GeneralStatusEnum;
+use App\Helpers\Enum;
+use App\Models\Renter;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RenterUpdateRequest extends FormRequest
@@ -26,8 +29,7 @@ class RenterUpdateRequest extends FormRequest
         $renterId = $renter->id;
 
         return [
-            'name' => "required|string| unique:renters,name,$renterId| max:1000 | min:1",
-            'status' => "required|in:$enum"
+            'name' => "required|string| unique:renters,name,$renterId| max:1000 | min:1"
         ];
     }
 }

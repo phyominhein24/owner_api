@@ -2,6 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\GeneralStatusEnum;
+use App\Helpers\Enum;
+use App\Models\Street;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StreetUpdateRequest extends FormRequest
@@ -26,8 +29,7 @@ class StreetUpdateRequest extends FormRequest
         $streetId = $street->id;
 
         return [
-            'name' => "required|string| unique:streets,name,$streetId| max:1000 | min:1",
-            'status' => "required|in:$enum"
+            'name' => "required|string| unique:streets,name,$streetId| max:1000 | min:1"
         ];
     }
 }
