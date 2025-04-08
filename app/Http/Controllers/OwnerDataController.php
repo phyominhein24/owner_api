@@ -52,19 +52,35 @@ class OwnerDataController extends Controller
     public function store(OwnerDataStoreRequest $request)
     {
         DB::beginTransaction();
-        $payload = collect($request->validated());
-
-        if ($request->hasFile('photos')) {
-            $data['photos'] = collect($request->file('photos'))->map(fn ($file) => $file->store('owner_photos', 'public'));
-        }
 
         try {
-            $ownerData = OwnerData::create($payload->toArray());
+            $data = collect($request->validated());
+
+            // 1. Create OwnerData
+            $ownerDataFields = $data->except('contracts');
+            $ownerData = OwnerData::create($ownerDataFields->toArray());
+
+            // 2. Create Contracts
+            $contracts = $data->get('contracts', []);
+
+            foreach ($contracts as $contract) {
+                Contract::create([
+                    'owner_data_id' => $ownerData->id,
+                    'contract_date' => $contract['contract_date'],
+                    'end_of_contract_date' => $contract['end_of_contract_date'],
+                    'price_per_month' => $contract['price_per_month'],
+                    'total_months' => $contract['total_months'],
+                    'notes' => $contract['notes'] ?? null,
+                    'photos' => is_array($contract['photos']) ? $contract['photos'] : [$contract['photos']]
+                ]);
+            }
+
             DB::commit();
-            return $this->success('ownerData created successfully', $ownerData);
+
+            return $this->success('Owner data and contracts created successfully', $ownerData);
         } catch (Exception $e) {
-            DB::rollback();
-            return $this->internalServerError();
+            DB::rollBack();
+            return $this->internalServerError($e->getMessage());
         }
     }
 
@@ -84,20 +100,38 @@ class OwnerDataController extends Controller
     public function update(OwnerDataUpdateRequest $request, $id)
     {
         DB::beginTransaction();
-        $payload = collect($request->validated());
-
-        if ($request->hasFile('photos')) {
-            $data['photos'] = collect($request->file('photos'))->map(fn ($file) => $file->store('owner_photos', 'public'));
-        }
-        
+    
         try {
+            $payload = collect($request->validated());
+    
+            // 1. Find and update OwnerData
             $ownerData = OwnerData::findOrFail($id);
-            $ownerData->update($payload->toArray());
+            $ownerData->update($payload->except('contracts')->toArray());
+    
+            // 2. Handle contracts
+            if ($payload->has('contracts')) {
+                // Delete old contracts (optional - you can also update them individually if needed)
+                $ownerData->contracts()->delete();
+    
+                // Create new contracts
+                foreach ($payload['contracts'] as $contract) {
+                    $ownerData->contracts()->create([
+                        'contract_date' => $contract['contract_date'],
+                        'end_of_contract_date' => $contract['end_of_contract_date'],
+                        'price_per_month' => $contract['price_per_month'],
+                        'total_months' => $contract['total_months'],
+                        'notes' => $contract['notes'] ?? null,
+                        'photos' => is_array($contract['photos']) ? $contract['photos'] : [$contract['photos']],
+                    ]);
+                }
+            }
+    
             DB::commit();
-            return $this->success('ownerData updated successfully by id', $ownerData);
+    
+            return $this->success('OwnerData and related contracts updated successfully', $ownerData);
         } catch (Exception $e) {
             DB::rollback();
-            return $this->internalServerError();
+            return $this->internalServerError($e->getMessage());
         }
     }
 

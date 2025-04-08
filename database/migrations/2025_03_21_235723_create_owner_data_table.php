@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Enums\OrderStatusEnum;
 
 return new class extends Migration
 {
@@ -14,6 +15,8 @@ return new class extends Migration
         Schema::create('owner_data', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('owner_id');
+            $table->string('property');
+
             $table->unsignedBigInteger('corner_id');
             $table->unsignedBigInteger('city_id');
             $table->unsignedBigInteger('township_id');
@@ -26,16 +29,20 @@ return new class extends Migration
             $table->string('meter_no');
             $table->string('meter_bill_code');
             $table->string('wifi_user_id');
-            $table->unsignedBigInteger('land_id')->nullable();
-            $table->string('issuance_date')->nullable();
-            $table->string('expired')->nullable();
+
+            $table->unsignedBigInteger('land_id');
+            $table->string('issuance_date');
+            $table->string('expired');
+
             $table->unsignedBigInteger('renter_id')->nullable();
-            $table->timestamp('contract_date')->nullable();
-            $table->timestamp('end_of_contract_date')->nullable();
-            $table->string('price_per_month')->nullable();
-            $table->string('total_months')->nullable();
-            $table->string('notes')->nullable();
-            $table->json('photos')->nullable();
+            // $table->timestamp('contract_date')->nullable();
+            // $table->timestamp('end_of_contract_date')->nullable();
+            // $table->string('price_per_month')->nullable();
+            // $table->string('total_months')->nullable();
+            // $table->string('notes')->nullable();
+            // $table->json('photos')->nullable();
+
+            $table->string('status')->default(OrderStatusEnum::PENDING->value);
 
             $table->auditColumns();
 

@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Enums\GeneralStatusEnum;
+use App\Helpers\Enum;
 
 class OwnerDataUpdateRequest extends FormRequest
 {
@@ -21,6 +23,9 @@ class OwnerDataUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
+
+        $enum = implode(',', (new Enum(GeneralStatusEnum::class))->values());
+
         return [
             'owner_id' => 'required|exists:owners,id',
             'corner_id' => 'required|exists:corners,id',
@@ -39,13 +44,14 @@ class OwnerDataUpdateRequest extends FormRequest
             'issuance_date' => 'nullable|date',
             'expired' => 'nullable|date',
             'renter_id' => 'nullable|exists:renters,id',
-            'contract_date' => 'nullable|date',
-            'end_of_contract_date' => 'nullable|date',
-            'price_per_month' => 'nullable|numeric',
-            'total_months' => 'nullable|integer',
-            'notes' => 'nullable|string',
-            'photos' => 'nullable|array',
-            'photos.*' => 'file|image|max:2048'
+            'status' => "nullable|in:$enum"
+            // 'contract_date' => 'nullable|date',
+            // 'end_of_contract_date' => 'nullable|date',
+            // 'price_per_month' => 'nullable|numeric',
+            // 'total_months' => 'nullable|integer',
+            // 'notes' => 'nullable|string',
+            // 'photos' => 'nullable|array',
+            // 'photos.*' => 'file|image|max:2048'
         ];
     }
 }

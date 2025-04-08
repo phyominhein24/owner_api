@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Enums\GeneralStatusEnum;
+use App\Helpers\Enum;
 
 class OwnerDataStoreRequest extends FormRequest
 {
@@ -21,6 +23,9 @@ class OwnerDataStoreRequest extends FormRequest
      */
     public function rules(): array
     {
+
+        $enum = implode(',', (new Enum(GeneralStatusEnum::class))->values());
+
         return [
             'owner_id' => 'required|exists:owners,id',
             'corner_id' => 'required|exists:corners,id',
@@ -29,7 +34,7 @@ class OwnerDataStoreRequest extends FormRequest
             'ward_id' => 'required|exists:wards,id',
             'street_id' => 'required|exists:streets,id',
             'wifi_id' => 'required|exists:wifis,id',
-            'land_no' => 'required|string|max:255',
+            'land_no' => 'required|exists:lands,id',
             'house_no' => 'required|string|max:255',
             'property' => 'required|string|max:255',
             'meter_no' => 'required|string|max:255',
@@ -39,13 +44,14 @@ class OwnerDataStoreRequest extends FormRequest
             'issuance_date' => 'nullable|date',
             'expired' => 'nullable|date',
             'renter_id' => 'nullable|exists:renters,id',
-            'contract_date' => 'nullable|date',
-            'end_of_contract_date' => 'nullable|date',
-            'price_per_month' => 'nullable|numeric',
-            'total_months' => 'nullable|integer',
-            'notes' => 'nullable|string',
-            'photos' => 'nullable|array',
-            'photos.*' => 'file|image|max:2048'
+            'status' => "nullable|in:$enum"
+            // 'contract_date' => 'nullable|date',
+            // 'end_of_contract_date' => 'nullable|date',
+            // 'price_per_month' => 'nullable|numeric',
+            // 'total_months' => 'nullable|integer',
+            // 'notes' => 'nullable|string',
+            // 'photos' => 'nullable|array',
+            // 'photos.*' => 'file|image|max:2048'
         ];
     }
 }
