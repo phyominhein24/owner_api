@@ -15,7 +15,6 @@ return new class extends Migration
         Schema::create('owner_data', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('owner_id');
-            $table->string('property');
 
             $table->unsignedBigInteger('corner_id');
             $table->unsignedBigInteger('city_id');
