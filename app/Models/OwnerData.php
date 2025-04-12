@@ -65,4 +65,9 @@ class OwnerData extends Model
             }
         });
     }
+
+    public function contracts()
+    {
+        return $this->hasMany(Contract::class);
+    }
 }

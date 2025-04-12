@@ -23,6 +23,7 @@ use App\Http\Controllers\LandController;
 use App\Http\Controllers\RenterController;
 use App\Http\Controllers\OwnerDataController;
 use App\Http\Controllers\WardController;
+use App\Http\Controllers\ContractController;
 use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
@@ -159,6 +160,14 @@ Route::middleware('jwt')->group(function () {
         Route::get('/{id}', [OwnerDataController::class, 'show'])->permission(PermissionEnum::OWNER_DATA_SHOW->value);
         Route::post('/{id}', [OwnerDataController::class, 'update'])->permission(PermissionEnum::OWNER_DATA_UPDATE->value);
         Route::delete('/{id}', [OwnerDataController::class, 'destroy'])->permission(PermissionEnum::OWNER_DATA_DESTROY->value);        
+    });
+
+    Route::group(['prefix' => 'contract'], function () {
+        Route::get('/', [ContractController::class, 'index'])->permission(PermissionEnum::OWNER_DATA_INDEX->value);
+        Route::post('/', [ContractController::class, 'store'])->permission(PermissionEnum::OWNER_DATA_STORE->value);
+        Route::get('/{id}', [ContractController::class, 'show'])->permission(PermissionEnum::OWNER_DATA_SHOW->value);
+        Route::post('/{id}', [ContractController::class, 'update'])->permission(PermissionEnum::OWNER_DATA_UPDATE->value);
+        Route::delete('/{id}', [ContractController::class, 'destroy'])->permission(PermissionEnum::OWNER_DATA_DESTROY->value);        
     });
 
 });

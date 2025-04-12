@@ -28,8 +28,7 @@ class ContractUpdateRequest extends FormRequest
             'price_per_month' => 'nullable|string|max:255',
             'total_months' => 'nullable|string|max:255',
             'notes' => 'nullable|string|max:1000',
-            'photos' => 'nullable|array',
-            'photos.*' => 'string',
+            'photos' => 'nullable|array'
         ];
     }
 }

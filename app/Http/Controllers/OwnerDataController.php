@@ -22,7 +22,8 @@ class OwnerDataController extends Controller
     {
         DB::beginTransaction();
         try {
-            $ownerDatas = OwnerData::sortingQuery()
+            $ownerDatas = OwnerData::with('contracts')
+                ->sortingQuery()
                 ->searchQuery()
                 ->filterQuery()
                 ->filterDateQuery()
@@ -41,6 +42,9 @@ class OwnerDataController extends Controller
                 $ownerData->deleted_by = $ownerData->deleted_by ? User::find($ownerData->deleted_by)->name : "Unknown";
                 return $ownerData;
             });
+
+
+
             DB::commit();
             return $this->success('ownerDatas retrived successfully', $ownerDatas);
         } catch (Exception $e) {
@@ -56,28 +60,28 @@ class OwnerDataController extends Controller
         try {
             $data = collect($request->validated());
 
-            // 1. Create OwnerData
-            $ownerDataFields = $data->except('contracts');
-            $ownerData = OwnerData::create($ownerDataFields->toArray());
+            // // 1. Create OwnerData
+            // $ownerDataFields = $data->except('contracts');
+            // $ownerData = OwnerData::create($ownerDataFields->toArray());
 
-            // 2. Create Contracts
-            $contracts = $data->get('contracts', []);
+            // // 2. Create Contracts
+            // $contracts = $data->get('contracts', []);
 
-            foreach ($contracts as $contract) {
-                Contract::create([
-                    'owner_data_id' => $ownerData->id,
-                    'contract_date' => $contract['contract_date'],
-                    'end_of_contract_date' => $contract['end_of_contract_date'],
-                    'price_per_month' => $contract['price_per_month'],
-                    'total_months' => $contract['total_months'],
-                    'notes' => $contract['notes'] ?? null,
-                    'photos' => is_array($contract['photos']) ? $contract['photos'] : [$contract['photos']]
-                ]);
-            }
+            // foreach ($contracts as $contract) {
+            //     Contract::create([
+            //         'owner_data_id' => $ownerData->id,
+            //         'contract_date' => $contract['contract_date'],
+            //         'end_of_contract_date' => $contract['end_of_contract_date'],
+            //         'price_per_month' => $contract['price_per_month'],
+            //         'total_months' => $contract['total_months'],
+            //         'notes' => $contract['notes'] ?? null,
+            //         'photos' => is_array($contract['photos']) ? $contract['photos'] : [$contract['photos']]
+            //     ]);
+            // }
 
             DB::commit();
 
-            return $this->success('Owner data and contracts created successfully', $ownerData);
+            return $this->success('Owner data created successfully', $ownerData);
         } catch (Exception $e) {
             DB::rollBack();
             return $this->internalServerError($e->getMessage());
