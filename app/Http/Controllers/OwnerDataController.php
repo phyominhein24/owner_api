@@ -81,7 +81,7 @@ class OwnerDataController extends Controller
 
             DB::commit();
 
-            return $this->success('Owner data created successfully', $ownerData);
+            return $this->success('Owner data created successfully', $data);
         } catch (Exception $e) {
             DB::rollBack();
             return $this->internalServerError($e->getMessage());
