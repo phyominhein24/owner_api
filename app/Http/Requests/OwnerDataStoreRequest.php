@@ -45,6 +45,7 @@ class OwnerDataStoreRequest extends FormRequest
             'expired' => 'required|date',
             'renter_id' => 'nullable|exists:renters,id',
             'status' => "nullable|in:$enum"
+            
             // 'contract_date' => 'nullable|date',
             // 'end_of_contract_date' => 'nullable|date',
             // 'price_per_month' => 'nullable|numeric',
