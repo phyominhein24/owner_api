@@ -43,6 +43,15 @@ Route::post('/reset-password', [PasswordResetController::class, 'resetPassword']
 Route::get('/counters', [CounterController::class, 'index']);
 Route::get('/profiles', [WebAuthController::class, 'userProfile']);
 
+Route::group(['prefix' => 'ownerdata'], function () {
+    Route::get('/', [OwnerDataController::class, 'index']);
+    Route::post('/', [OwnerDataController::class, 'store'])->permission(PermissionEnum::OWNER_DATA_STORE->value);
+    Route::get('/{id}', [OwnerDataController::class, 'show']);
+    Route::post('/{id}', [OwnerDataController::class, 'update'])->permission(PermissionEnum::OWNER_DATA_UPDATE->value);
+    Route::delete('/{id}', [OwnerDataController::class, 'destroy'])->permission(PermissionEnum::OWNER_DATA_DESTROY->value);        
+});
+
+
 Route::group(['prefix' => 'auth'], function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/loginnn', [WebAuthController::class, 'userProfile']);
@@ -154,14 +163,7 @@ Route::middleware('jwt')->group(function () {
         Route::delete('/{id}', [RenterController::class, 'destroy'])->permission(PermissionEnum::RENTER_DESTROY->value);        
     });
 
-    Route::group(['prefix' => 'ownerdata'], function () {
-        Route::get('/', [OwnerDataController::class, 'index'])->permission(PermissionEnum::OWNER_DATA_INDEX->value);
-        Route::post('/', [OwnerDataController::class, 'store'])->permission(PermissionEnum::OWNER_DATA_STORE->value);
-        Route::get('/{id}', [OwnerDataController::class, 'show'])->permission(PermissionEnum::OWNER_DATA_SHOW->value);
-        Route::post('/{id}', [OwnerDataController::class, 'update'])->permission(PermissionEnum::OWNER_DATA_UPDATE->value);
-        Route::delete('/{id}', [OwnerDataController::class, 'destroy'])->permission(PermissionEnum::OWNER_DATA_DESTROY->value);        
-    });
-
+    
     Route::group(['prefix' => 'contract'], function () {
         Route::get('/', [ContractController::class, 'index'])->permission(PermissionEnum::OWNER_DATA_INDEX->value);
         Route::post('/', [ContractController::class, 'store'])->permission(PermissionEnum::OWNER_DATA_STORE->value);
