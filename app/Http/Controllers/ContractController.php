@@ -43,15 +43,15 @@ class ContractController extends Controller
         $payload = collect($request->validated());
         try {
 
+            $photoPaths = [];
             if ($request->hasFile('photos')) {
-                $photoPaths = [];
-        
                 foreach ($request->file('photos') as $photo) {
-                    $photoPaths[] = $photo->store('contracts/photos', 'public'); // saves to storage/app/public/contracts/photos
+                    $path = $photo->store('images', 'public');
+                    $photoPaths[] = $path;
                 }
-        
-                $payload['photos'] = $photoPaths;
             }
+
+            $payload['photos'] = $photoPaths;
 
             $contract = Contract::create($payload->toArray());
             DB::commit();
