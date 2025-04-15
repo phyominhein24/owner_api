@@ -109,6 +109,33 @@ class OwnerDataController extends Controller
         try {
             $ownerData = OwnerData::with('contracts')->findOrFail($id);
 
+            $ownerData->owner_id = $ownerData->owner_id ? Owner::find($ownerData->owner_id)->name : "Unknown";
+            $ownerData->corner_id = $ownerData->corner_id ? Corner::find($ownerData->corner_id)->name : "Unknown";
+            $ownerData->city_id = $ownerData->city_id ? City::find($ownerData->city_id)->name : "Unknown";
+            $ownerData->land_id = $ownerData->land_id ? Land::find($ownerData->land_id)->name : "Unknown";
+            $ownerData->renter_id = $ownerData->renter_id ? Renter::find($ownerData->renter_id)->name : "Unknown";
+            $ownerData->township_id = $ownerData->township_id ? Township::find($ownerData->township_id)->name : "Unknown";
+            $ownerData->ward_id = $ownerData->ward_id ? Ward::find($ownerData->ward_id)->name : "Unknown";
+            $ownerData->street_id = $ownerData->street_id ? Street::find($ownerData->street_id)->name : "Unknown";
+            $ownerData->wifi_id = $ownerData->wifi_id ? Wifi::find($ownerData->wifi_id)->name : "Unknown";
+            $ownerData->created_by = $ownerData->created_by ? User::find($ownerData->created_by)->name : "Unknown";
+            $ownerData->updated_by = $ownerData->updated_by ? User::find($ownerData->updated_by)->name : "Unknown";
+            $ownerData->deleted_by = $ownerData->deleted_by ? User::find($ownerData->deleted_by)->name : "Unknown";
+
+            DB::commit();
+            return $this->success('ownerData retrieved successfully by id', $ownerData);
+        } catch (Exception $e) {
+            DB::rollback();
+            return $this->internalServerError();
+        }
+    }
+
+    public function show2($id)
+    {
+        DB::beginTransaction();
+        try {
+            $ownerData = OwnerData::with('contracts')->findOrFail($id);
+
             // $ownerData->owner_id = $ownerData->owner_id ? Owner::find($ownerData->owner_id)->name : "Unknown";
             // $ownerData->corner_id = $ownerData->corner_id ? Corner::find($ownerData->corner_id)->name : "Unknown";
             // $ownerData->city_id = $ownerData->city_id ? City::find($ownerData->city_id)->name : "Unknown";

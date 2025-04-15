@@ -159,6 +159,7 @@ Route::middleware('jwt')->group(function () {
         Route::get('/', [OwnerDataController::class, 'index'])->permission(PermissionEnum::OWNER_DATA_INDEX->value);
         Route::post('/', [OwnerDataController::class, 'store'])->permission(PermissionEnum::OWNER_DATA_STORE->value);
         Route::get('/{id}', [OwnerDataController::class, 'show'])->permission(PermissionEnum::OWNER_DATA_SHOW->value);
+        Route::get('/{id}/2', [OwnerDataController::class, 'show2'])->permission(PermissionEnum::OWNER_DATA_SHOW->value);
         Route::post('/{id}', [OwnerDataController::class, 'update'])->permission(PermissionEnum::OWNER_DATA_UPDATE->value);
         Route::delete('/{id}', [OwnerDataController::class, 'destroy'])->permission(PermissionEnum::OWNER_DATA_DESTROY->value);        
     });
