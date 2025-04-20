@@ -9,6 +9,7 @@ use App\Models\Routes;
 use App\Models\Contract;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 
 class ContractController extends Controller
@@ -78,15 +79,54 @@ class ContractController extends Controller
     public function update(ContractUpdateRequest $request, $id)
     {
         DB::beginTransaction();
-        $payload = collect($request->validated());
+
         try {
             $contract = Contract::findOrFail($id);
+            $payload = collect($request->validated());
+
+            // Get old photo paths from DB (assuming it's stored as an array)
+            $oldPhotos = $contract->photos ?? [];
+
+            $finalPhotos = [];
+
+            $rawPhotos = $request->input('photos', []); // get all inputs under 'photos'
+            $filePhotos = $request->file('photos', []); // get all UploadedFile under 'photos'
+
+            // Handle string inputs first (old photos to keep)
+            if (is_array($rawPhotos)) {
+                foreach ($rawPhotos as $item) {
+                    if (is_string($item)) {
+                        $finalPhotos[] = $item;
+                    }
+                }
+            }
+
+            // Handle new uploaded files
+            if (is_array($filePhotos)) {
+                foreach ($filePhotos as $file) {
+                    if ($file instanceof \Illuminate\Http\UploadedFile) {
+                        $path = $file->store('images', 'public');
+                        $finalPhotos[] = $path;
+                    }
+                }
+            }
+
+            // Determine which old photos should be deleted
+            $deletedPhotos = array_diff($oldPhotos, $finalPhotos);
+            foreach ($deletedPhotos as $photo) {
+                Storage::disk('public')->delete($photo);
+            }
+
+            // Store merged photo list
+            $payload['photos'] = $finalPhotos;
+
             $contract->update($payload->toArray());
+
             DB::commit();
-            return $this->success('contract updated successfully by id', $contract);
-        } catch (Exception $e) {
-            DB::rollback();
-            return $this->internalServerError();
+            return $this->success('Contract updated successfully', $contract);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->internalServerError($e->getMessage());
         }
     }
 

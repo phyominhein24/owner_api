@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Enums\GeneralStatusEnum;
+use App\Enums\RenterStatusEnum;
 use App\Helpers\Enum;
 
 class OwnerDataUpdateRequest extends FormRequest
@@ -24,7 +24,7 @@ class OwnerDataUpdateRequest extends FormRequest
     public function rules(): array
     {
 
-        $enum = implode(',', (new Enum(GeneralStatusEnum::class))->values());
+        $enum = implode(',', (new Enum(RenterStatusEnum::class))->values());
 
         return [
             'owner_id' => 'required|exists:owners,id',

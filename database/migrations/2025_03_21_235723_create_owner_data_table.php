@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Enums\OrderStatusEnum;
+use App\Enums\RenterStatusEnum;
 
 return new class extends Migration
 {
@@ -41,7 +41,7 @@ return new class extends Migration
             // $table->string('notes')->nullable();
             // $table->json('photos')->nullable();
 
-            $table->string('status')->default(OrderStatusEnum::PENDING->value);
+            $table->string('status')->default(RenterStatusEnum::UNRENT->value);
 
             $table->auditColumns();
 
